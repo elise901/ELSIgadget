@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ELSI Congress Presentation Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .subtitle {
+            color: #7f8c8d;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .form-section {
+            margin-bottom: 40px;
+        }
+
+        .form-section h2 {
+            color: #34495e;
+            font-size: 16px;
+            margin-bottom: 20px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        input[type="time"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #bdc3c7;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="date"]:focus,
+        input[type="time"]:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        .output-section {
+            background-color: #ecf0f1;
+            padding: 25px;
+            border-radius: 4px;
+            margin-top: 30px;
+            border-left: 4px solid #3498db;
+        }
+
+        .output-section h2 {
+            color: #34495e;
+            font-size: 16px;
+            margin-bottom: 15px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        #output {
+            background-color: white;
+            padding: 20px;
+            border-radius: 4px;
+            color: #2c3e50;
+            line-height: 1.8;
+            font-size: 16px;
+            min-height: 80px;
+        }
+
+        #output.empty {
+            color: #95a5a6;
+            font-style: italic;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 25px;
+        }
+
+        button {
+            flex: 1;
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: 600;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-generate {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .btn-generate:hover {
+            background-color: #2980b9;
+            box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
+        }
+
+        .btn-copy {
+            background-color: #27ae60;
+            color: white;
+        }
+
+        .btn-copy:hover {
+            background-color: #229954;
+            box-shadow: 0 4px 8px rgba(39, 174, 96, 0.3);
+        }
+
+        .btn-clear {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .btn-clear:hover {
+            background-color: #c0392b;
+            box-shadow: 0 4px 8px rgba(231, 76, 60, 0.3);
+        }
+
+        .copy-feedback {
+            display: none;
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #d4edda;
+            color: #155724;
+            border-radius: 4px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .copy-feedback.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>ELSI Congress Presentation Generator</h1>
+        <p class="subtitle">Fill in your information below to generate your presentation announcement</p>
+
+        <div class="form-section">
+            <h2>Presentation Information</h2>
+
+            <div class="form-group">
+                <label for="name">Your Name *</label>
+                <input type="text" id="name" placeholder="Enter your full name">
+            </div>
+
+            <div class="form-group">
+                <label for="presentation">Presentation Name *</label>
+                <input type="text" id="presentation" placeholder="Enter your presentation title">
+            </div>
+
+            <div class="form-group">
+                <label for="date">Date *</label>
+                <input type="date" id="date">
+            </div>
+
+            <div class="form-group">
+                <label for="time">Time *</label>
+                <input type="time" id="time">
+            </div>
+
+            <div class="form-group">
+                <label for="keywords">Keywords *</label>
+                <input type="text" id="keywords" placeholder="e.g., Ethics, Clinical Research, Informed Consent">
+            </div>
+        </div>
+
+        <div class="output-section">
+            <h2>Your Announcement</h2>
+            <div id="output" class="empty">Your announcement will appear here...</div>
+            <div class="copy-feedback" id="copyFeedback">Copied to clipboard!</div>
+
+            <div class="button-group">
+                <button class="btn-generate" onclick="generateOutput()">Generate</button>
+                <button class="btn-generate" onclick="generateRandom()">Random</button>
+                <button class="btn-copy" onclick="copyToClipboard()">Copy</button>
+                <button class="btn-clear" onclick="clearForm()">Clear</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const inputs = ['name', 'presentation', 'date', 'time', 'keywords'];
+
+        // Templates list (expanded)
+        const templates = [
+            ({ name, presentation, formattedDate, formattedTime, keywords }) => {
+                let s = `Hi everyone! My name is ${name}, and I will present ${presentation} at ELSI Congress!`;
+                if (formattedDate || formattedTime) s += ` My presentation is on ${formattedDate} ${formattedTime}`.trim() + '.';
+                else s += ' My presentation is on [Date] [Time].';
+                if (keywords) s += ` This presentation is about ${keywords}.`;
+                else s += ' This presentation is about [Keywords].';
+                return s;
+            },
+            ({ name, presentation, formattedDate, formattedTime, keywords }) => {
+                const when = (formattedDate || formattedTime) ? `${formattedDate} at ${formattedTime}`.trim() : '[Date] [Time]';
+                return `Announcement: ${presentation} — presented by ${name}. Scheduled for ${when}. Topic(s): ${keywords || '[Keywords]'}.`;
+            },
+            ({ name, presentation, formattedDate, formattedTime, keywords }) => {
+                const when = (formattedDate || formattedTime) ? `${formattedDate} • ${formattedTime}` : '[Date] • [Time]';
+                return `my name is ${name} and I will present "${presentation}" at ELSI Congress on ${when}. Join us to learn about ${keywords || '[Keywords]'}.`;
+            },
+            ({ name, presentation, formattedDate, formattedTime, keywords }) => {
+                const when = (formattedDate || formattedTime) ? `${formattedDate} ${formattedTime}` : '[Date] [Time]';
+                return `${presentation} by ${name} — ${when}. ${keywords || '[Keywords]'}`;
+            },
+            // 4: Invitation to Q&A
+            ({ name, presentation, formattedDate, formattedTime, keywords }) => {
+                const when = (formattedDate || formattedTime) ? `${formattedDate} at ${formattedTime}` : '[Date] [Time]';
+                return `My name is ${name}. Please join me for a presentation titled "${presentation}" on ${when}. A Q&A session will follow — bring questions about ${keywords || '[Keywords]'}.`;
+            },
+            // 5: Abstract-style (academic)
+            ({ name, presentation, formattedDate, formattedTime, keywords }) => {
+                const when = (formattedDate || formattedTime) ? `${formattedDate}, ${formattedTime}` : '[Date], [Time]';
+                return `${presentation} (Presenter: ${name}) — ${when}. Abstract: This talk explores ${keywords || '[Keywords]'} and its implications for ELSI.`;
+            },
+            // 6: Poster/session notice
+            ({ name, presentation, formattedDate, formattedTime, keywords }) => {
+                const when = (formattedDate || formattedTime) ? `${formattedDate} • ${formattedTime}` : '[Date] • [Time]';
+                return `Poster: "${presentation}" by ${name}. Viewing and discussion on ${when}. Focus: ${keywords || '[Keywords]'}.`;
+            },
+            // 7: Save-the-date / Reminder
+            ({ name, presentation, formattedDate, formattedTime, keywords }) => {
+                const when = (formattedDate || formattedTime) ? `${formattedDate} at ${formattedTime}` : '[Date] at [Time]';
+                return `Please come to my presentation, ${presentation}! Session time: ${when}. My name is ${name}. I will share my insights on ${keywords || '[Keywords]'}.`;
+            },
+            // 8: Key takeaways summary
+            ({ name, presentation, formattedDate, formattedTime, keywords }) => {
+                return `Hope to see everyone at ELSI Congress! My presentation title is ${presentation} , by ${name}: on ${keywords || '[Keywords]'}; Hope we can have a great discussion after my presentation.`;
+            }
+        ];
+
+        function generateOutput(templateIndex) {
+            const name = document.getElementById('name').value.trim() || '[Name]';
+            const presentation = document.getElementById('presentation').value.trim() || '[Presentation Name]';
+            const date = document.getElementById('date').value;
+            const time = document.getElementById('time').value;
+            const keywords = document.getElementById('keywords').value.trim();
+
+            const outputDiv = document.getElementById('output');
+
+            const allEmpty = (name === '[Name]' && presentation === '[Presentation Name]' && !date && !time && !keywords);
+            if (allEmpty) {
+                outputDiv.textContent = 'Your announcement will appear here...';
+                outputDiv.classList.add('empty');
+                return;
+            }
+
+            let formattedDate = '';
+            if (date) {
+                const dateObj = new Date(date + 'T00:00:00');
+                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                formattedDate = dateObj.toLocaleDateString('en-US', options);
+            }
+
+            let formattedTime = '';
+            if (time) {
+                const [hours, minutes] = time.split(':');
+                const timeObj = new Date(2000, 0, 1, hours, minutes);
+                formattedTime = timeObj.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+            }
+
+            const fields = { name, presentation, formattedDate, formattedTime, keywords };
+
+            let idx = typeof templateIndex === 'number' ? templateIndex : parseInt(document.getElementById('templateSelect')?.value || '0', 10);
+            if (Number.isNaN(idx) || idx < 0 || idx >= templates.length) idx = 0;
+
+            const announcement = templates[idx](fields);
+            outputDiv.textContent = announcement;
+            outputDiv.classList.remove('empty');
+        }
+
+        function generateRandom() {
+            const rnd = Math.floor(Math.random() * templates.length);
+            const select = document.getElementById('templateSelect');
+            if (select) select.value = String(rnd);
+            generateOutput(rnd);
+        }
+
+        function copyToClipboard() {
+            const output = document.getElementById('output').textContent;
+            if (output === 'Your announcement will appear here...') {
+                alert('Please fill in the form and generate an announcement first.');
+                return;
+            }
+
+            navigator.clipboard.writeText(output).then(() => {
+                const feedback = document.getElementById('copyFeedback');
+                feedback.classList.add('show');
+                setTimeout(() => {
+                    feedback.classList.remove('show');
+                }, 2000);
+            });
+        }
+
+        function clearForm() {
+            inputs.forEach(id => {
+                document.getElementById(id).value = '';
+            });
+            const select = document.getElementById('templateSelect');
+            if (select) select.value = '0';
+            const outputDiv = document.getElementById('output');
+            outputDiv.textContent = 'Your announcement will appear here...';
+            outputDiv.classList.add('empty');
+        }
+    </script>
+</body>
+</html>
